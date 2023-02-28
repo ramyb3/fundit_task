@@ -10,10 +10,9 @@ export type AppState = {
 
 const api = createApiClient();
 
-const App = () => {
+export default function App() {
   const [search, setSearch] = React.useState<string>("");
   const [matches, setMatches] = React.useState<Match[]>([]);
-
   const [labels, setLabels] = React.useState<string>(""); // part B.3
 
   // part D
@@ -44,156 +43,147 @@ const App = () => {
     userIp: "",
   });
 
-  const press = () =>
-    // part D
-    {
-      let ok = true; // flag for form
-      let message = false; // flag for alerts
+  // part D
+  const press = () => {
+    let ok = true; // flag for form
+    let message = false; // flag for alerts
 
-      if (obj.companyName == "" || obj.amountReq == 0) {
-        alert("You need to fill all form in 1st section!");
-        message = true;
-        ok = false;
-      }
+    if (obj.companyName == "" || obj.amountReq == 0) {
+      alert("You need to fill all form in 1st section!");
+      message = true;
+      ok = false;
+    }
 
-      if (
-        (borrower.bankruptcy === "" ||
-          borrower.creditScore == 0 ||
-          borrower.ssn == 0) &&
-        ok == true
-      ) {
-        alert("You need to fill all form in 2nd section!");
-        message = true;
-        ok = false;
-      }
+    if (
+      (borrower.bankruptcy === "" ||
+        borrower.creditScore == 0 ||
+        borrower.ssn == 0) &&
+      ok == true
+    ) {
+      alert("You need to fill all form in 2nd section!");
+      message = true;
+      ok = false;
+    }
 
-      if (
-        (financeData.number == "" ||
-          financeData.balance == 0 ||
-          financeData.currency == "") &&
-        ok == true
-      ) {
-        alert("You need to fill all form in 3rd section!");
-        message = true;
-        ok = false;
-      }
+    if (
+      (financeData.number == "" ||
+        financeData.balance == 0 ||
+        financeData.currency == "") &&
+      ok == true
+    ) {
+      alert("You need to fill all form in 3rd section!");
+      message = true;
+      ok = false;
+    }
 
-      if (
-        (user.firstName == "" ||
-          user.lastName == "" ||
-          user.email == "" ||
-          user.phoneNumber == "" ||
-          user.state == "" ||
-          user.userIp == "") &&
-        ok == true
-      ) {
-        alert("You need to fill all form in 4th section!");
-        message = true;
-        ok = false;
-      }
+    if (
+      (user.firstName == "" ||
+        user.lastName == "" ||
+        user.email == "" ||
+        user.phoneNumber == "" ||
+        user.state == "" ||
+        user.userIp == "") &&
+      ok == true
+    ) {
+      alert("You need to fill all form in 4th section!");
+      message = true;
+      ok = false;
+    }
 
-      if (obj.labels.length == 0 && ok == true) {
-        alert("You need to choose at least 1 label!");
-        message = true;
-        ok = false;
-      }
+    if (obj.labels.length == 0 && ok == true) {
+      alert("You need to choose at least 1 label!");
+      message = true;
+      ok = false;
+    }
 
-      if (borrower.bankruptcy === "true")
-        // change bankruptcy to boolean value
-        borrower.bankruptcy = true;
+    // change bankruptcy to boolean value
+    if (borrower.bankruptcy === "true") {
+      borrower.bankruptcy = true;
+    }
 
-      if (borrower.bankruptcy === "false")
-        // change bankruptcy to boolean value
-        borrower.bankruptcy = false;
+    // change bankruptcy to boolean value
+    if (borrower.bankruptcy === "false") {
+      borrower.bankruptcy = false;
+    }
 
-      if (message == false) {
-        for (
-          var i = 0;
-          i < 4;
-          i++ // bank number checker (length && numbers)
+    if (!message) {
+      // bank number checker (length && numbers)
+      for (let i = 0; i < 4; i++) {
+        if (
+          Number.isNaN(parseInt(financeData.number[i])) ||
+          financeData.number.length < 4
         ) {
-          if (
-            Number.isNaN(parseInt(financeData.number[i])) ||
-            financeData.number.length < 4
-          ) {
-            document.getElementById("bank")?.focus();
-            ok = false;
-            break;
-          }
+          document.getElementById("bank")?.focus();
+          ok = false;
+          break;
         }
       }
+    }
 
-      if (obj.amountReq < 1 && message == false) {
-        // amountReq checker
-        document.getElementById("amount")?.focus();
-        ok = false;
-      }
+    if (obj.amountReq < 1 && !message) {
+      // amountReq checker
+      document.getElementById("amount")?.focus();
+      ok = false;
+    }
+    if (borrower.creditScore < 1 && !message) {
+      // creditScore checker
+      document.getElementById("credit")?.focus();
+      ok = false;
+    }
+    if (borrower.ssn < 1 && !message) {
+      // ssn checker
+      document.getElementById("ssn")?.focus();
+      ok = false;
+    }
+    if (financeData.balance < 1 && !message) {
+      // balance checker
+      document.getElementById("balance")?.focus();
+      ok = false;
+    }
+    if (!user.email.includes("@") && !message) {
+      // email checker
+      document.getElementById("email")?.focus();
+      ok = false;
+    }
 
-      if (borrower.creditScore < 1 && message == false) {
-        // creditScore checker
-        document.getElementById("credit")?.focus();
-        ok = false;
-      }
-
-      if (borrower.ssn < 1 && message == false) {
-        // ssn checker
-        document.getElementById("ssn")?.focus();
-        ok = false;
-      }
-
-      if (financeData.balance < 1 && message == false) {
-        // balance checker
-        document.getElementById("balance")?.focus();
-        ok = false;
-      }
-
-      if (!user.email.includes("@") && message == false) {
-        // email checker
-        document.getElementById("email")?.focus();
-        ok = false;
-      }
-
-      if (ok == true) {
-        // form is valid
-        let allData = {
-          id:
-            user.lastName +
-            borrower.creditScore +
-            user.state +
-            financeData.number,
-          creationTime: Date.now(),
-          companyName: obj.companyName,
-          amountReq: parseInt(obj.amountReq),
-          borrower: {
-            bankruptcy: borrower.bankruptcy,
-            creditScore: parseInt(borrower.creditScore),
-            ssn: parseInt(borrower.ssn),
-            financeData: {
-              number: "XXXXXX" + financeData.number,
-              balance: parseInt(financeData.balance),
-              currency: financeData.currency,
-            },
-            user: {
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              phoneNumber: user.phoneNumber,
-              state: user.state,
-              userIp: user.userIp,
-            },
+    // form is valid
+    if (ok) {
+      let allData = {
+        id:
+          user.lastName +
+          borrower.creditScore +
+          user.state +
+          financeData.number,
+        creationTime: Date.now(),
+        companyName: obj.companyName,
+        amountReq: parseInt(obj.amountReq),
+        borrower: {
+          bankruptcy: borrower.bankruptcy,
+          creditScore: parseInt(borrower.creditScore),
+          ssn: parseInt(borrower.ssn),
+          financeData: {
+            number: "XXXXXX" + financeData.number,
+            balance: parseInt(financeData.balance),
+            currency: financeData.currency,
           },
-          labels: obj.labels,
-        };
+          user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            state: user.state,
+            userIp: user.userIp,
+          },
+        },
+        labels: obj.labels,
+      };
 
-        console.log(allData);
+      setAdd(false);
+    }
+  };
 
-        setAdd(false);
-      }
-    };
-
-  const check = (
-    e: any // part D - multiple select
-  ) => {
+  // part D - multiple select
+  const check = (e: any) => {
     let value = Array.from(
       e.target.selectedOptions,
       (option: any) => option.value
@@ -208,16 +198,19 @@ const App = () => {
     }
     fetchMatches();
   }, []);
+
   let searchDebounce: any;
+
   const onSearch = (val: string, newPage?: number) => {
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(async () => {
       setSearch(val);
     }, 300);
   };
+
   return (
     <main>
-      {add == false ? (
+      {!add ? (
         <>
           <h1>Matches List</h1>
           <header>
@@ -452,5 +445,4 @@ const App = () => {
       )}
     </main>
   );
-};
-export default App;
+}

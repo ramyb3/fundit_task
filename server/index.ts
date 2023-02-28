@@ -1,13 +1,11 @@
 //@ts-nocheck
 import express from "express";
-
 import bodyParser = require("body-parser");
+import fs from "fs";
 import { tempData } from "./temp-data";
 
 const app = express();
-
 const PORT = 8888;
-
 const PAGE_SIZE = tempData.length; // part B.1
 
 app.use(bodyParser.json());
@@ -34,30 +32,31 @@ app.get("/api/match", (req, res) => {
   res.send(paginatedData);
 });
 
+//part C.2
 app.post("/api/data", (req, res) => {
-  //part C.2
+  const decline = [];
+  const approve = [];
 
-  let decline = [];
-  let approve = [];
-
-  for (var i = 0; i < req.body[1].length; i++) {
-    if (req.body[1][i] == "decline")
+  for (let i = 0; i < req.body[1].length; i++) {
+    if (req.body[1][i] == "decline") {
       decline.push(tempData.find((x: any) => x.id == req.body[0][i]));
+    }
 
-    if (req.body[1][i] == "approve")
+    if (req.body[1][i] == "approve") {
       approve.push(tempData.find((x: any) => x.id == req.body[0][i]));
+    }
   }
 
-  let obj = { decline: decline, approve: approve };
-
-  var fs = require("fs");
+  const obj = { decline, approve };
 
   return new Promise((reject) => {
     fs.writeFile(
       "./dataFromUser.json",
       JSON.stringify(obj),
       function (err: any) {
-        if (err) reject(err);
+        if (err) {
+          reject(err);
+        }
       }
     );
   });
