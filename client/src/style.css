@@ -1,0 +1,71 @@
+/* part A*/
+.A {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgb(2, 247, 5);
+  font-size: 60px;
+  color: rgb(2, 150, 5);
+  text-align: center;
+  float: right;
+}
+
+.A:after {
+  content: "A";
+}
+
+.B {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgb(255, 244, 14);
+  font-size: 60px;
+  color: rgb(252, 205, 0);
+  text-align: center;
+  float: right;
+}
+
+.B:after {
+  content: "B";
+}
+
+.C {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgb(255, 4, 14);
+  font-size: 60px;
+  color: rgb(255, 4, 14);
+  text-align: center;
+  float: right;
+}
+
+.C:after {
+  content: "C";
+}
+/* end of part A*/
+
+.button /* part C.1*/ {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* part D*/
+.box {
+  border-style: solid;
+  border-color: rgb(255, 205, 244);
+  width: 250px;
+  margin: auto;
+}
+
+.inputs {
+  font-size: 16px;
+  height: 20px;
+  width: 220px;
+}
+/* end of part D*/
