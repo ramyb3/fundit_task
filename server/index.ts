@@ -1,4 +1,3 @@
-//@ts-nocheck
 import express from "express";
 import bodyParser = require("body-parser");
 import fs from "fs";
@@ -39,11 +38,11 @@ app.post("/api/data", (req, res) => {
 
   for (let i = 0; i < req.body[1].length; i++) {
     if (req.body[1][i] == "decline") {
-      decline.push(tempData.find((x: any) => x.id == req.body[0][i]));
+      decline.push(tempData.find((data: any) => data.id == req.body[0][i]));
     }
 
     if (req.body[1][i] == "approve") {
-      approve.push(tempData.find((x: any) => x.id == req.body[0][i]));
+      approve.push(tempData.find((data: any) => data.id == req.body[0][i]));
     }
   }
 

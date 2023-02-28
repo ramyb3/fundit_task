@@ -1,12 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import { Matches } from "./Matches";
 import { createApiClient, Match } from "./api";
-
-export type AppState = {
-  matches?: Match[];
-  search: string;
-};
 
 const api = createApiClient();
 
@@ -16,7 +11,7 @@ export default function App() {
   const [labels, setLabels] = React.useState<string>(""); // part B.3
 
   // part D
-  const [add, setAdd] = useState(false);
+  const [add, setAdd] = React.useState(false);
   const [obj, setObj] = React.useState<any>({
     id: "",
     creationTime: 0,
@@ -53,29 +48,26 @@ export default function App() {
       message = true;
       ok = false;
     }
-
     if (
       (borrower.bankruptcy === "" ||
         borrower.creditScore == 0 ||
         borrower.ssn == 0) &&
-      ok == true
+      ok
     ) {
       alert("You need to fill all form in 2nd section!");
       message = true;
       ok = false;
     }
-
     if (
       (financeData.number == "" ||
         financeData.balance == 0 ||
         financeData.currency == "") &&
-      ok == true
+      ok
     ) {
       alert("You need to fill all form in 3rd section!");
       message = true;
       ok = false;
     }
-
     if (
       (user.firstName == "" ||
         user.lastName == "" ||
@@ -83,29 +75,25 @@ export default function App() {
         user.phoneNumber == "" ||
         user.state == "" ||
         user.userIp == "") &&
-      ok == true
+      ok
     ) {
       alert("You need to fill all form in 4th section!");
       message = true;
       ok = false;
     }
-
     if (obj.labels.length == 0 && ok == true) {
       alert("You need to choose at least 1 label!");
       message = true;
       ok = false;
     }
-
-    // change bankruptcy to boolean value
     if (borrower.bankruptcy === "true") {
+      // change bankruptcy to boolean value
       borrower.bankruptcy = true;
     }
-
-    // change bankruptcy to boolean value
     if (borrower.bankruptcy === "false") {
+      // change bankruptcy to boolean value
       borrower.bankruptcy = false;
     }
-
     if (!message) {
       // bank number checker (length && numbers)
       for (let i = 0; i < 4; i++) {
@@ -119,7 +107,6 @@ export default function App() {
         }
       }
     }
-
     if (obj.amountReq < 1 && !message) {
       // amountReq checker
       document.getElementById("amount")?.focus();
@@ -145,9 +132,8 @@ export default function App() {
       document.getElementById("email")?.focus();
       ok = false;
     }
-
-    // form is valid
     if (ok) {
+      // form is valid
       let allData = {
         id:
           user.lastName +
@@ -184,7 +170,7 @@ export default function App() {
 
   // part D - multiple select
   const check = (e: any) => {
-    let value = Array.from(
+    const value = Array.from(
       e.target.selectedOptions,
       (option: any) => option.value
     );
@@ -196,12 +182,13 @@ export default function App() {
     async function fetchMatches() {
       setMatches(await api.getMatches());
     }
+
     fetchMatches();
   }, []);
 
-  let searchDebounce: any;
-
   const onSearch = (val: string, newPage?: number) => {
+    let searchDebounce: any;
+
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(async () => {
       setSearch(val);

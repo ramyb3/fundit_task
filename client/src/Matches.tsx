@@ -11,6 +11,19 @@ export const Matches = ({
   search: string;
   labels: string; // part B.3
 }) => {
+  const [status, setStatus] = React.useState<String[]>([]); //part C.2
+  const [data, setData] = React.useState<String[]>([]); //part C.2
+  const api = createData([data, status]); //part C.2
+
+  //part C.2
+  React.useEffect(() => {
+    async function fetchMatches() {
+      await api.getMatches();
+    }
+
+    fetchMatches();
+  }, [data]);
+
   let filteredMatches = matches.filter((t) =>
     (
       t.borrower.user.firstName.toLowerCase() +
@@ -21,29 +34,15 @@ export const Matches = ({
       .includes(search.toLowerCase())
   );
 
-  let label = filteredMatches.filter((x) => x.labels?.includes(labels)); // part B.3
+  const label = filteredMatches.filter((x) => x.labels?.includes(labels)); // part B.3
 
-  if (label.length != 0)
-    // part B.3
-    filteredMatches = label; // part B.3
-
-  if (search != "" && labels != "")
-    // part B.3
-    filteredMatches = label; // part B.3
-
-  const [status, setStatus] = React.useState<String[]>([]); //part C.2
-  const [data, setData] = React.useState<String[]>([]); //part C.2
-
-  const api = createData([data, status]); //part C.2
-
-  React.useEffect(() =>
-    //part C.2
-    {
-      async function fetchMatches() {
-        await api.getMatches();
-      }
-      fetchMatches();
-    }, [data]);
+  // part B.3
+  if (label.length != 0) {
+    filteredMatches = label;
+  }
+  if (search != "" && labels != "") {
+    filteredMatches = label;
+  }
 
   return (
     <ul className="matches">
@@ -58,20 +57,20 @@ export const Matches = ({
                   className="button"
                   type="button"
                   value="Approve"
-                  onClick={() => (
-                    setStatus([...status, "approve"]),
-                    setData([...data, match.id])
-                  )}
+                  onClick={() => {
+                    setStatus([...status, "approve"]);
+                    setData([...data, match.id]);
+                  }}
                 />
                 <input
                   style={{ right: "80px" }}
                   className="button"
                   type="button"
                   value="Decline"
-                  onClick={() => (
-                    setStatus([...status, "decline"]),
-                    setData([...data, match.id])
-                  )}
+                  onClick={() => {
+                    setStatus([...status, "decline"]);
+                    setData([...data, match.id]);
+                  }}
                 />
 
                 {/* part A */}
@@ -88,23 +87,27 @@ export const Matches = ({
 
                 <div>
                   <p className="userDate">
-                    <b>Full Name:</b> {match.borrower.user.firstName}{" "}
+                    <b>Full Name: </b>
+                    {match.borrower.user.firstName}{" "}
                     {match.borrower.user.lastName}
                   </p>
                   <p className="userDate">
-                    <b>Email:</b> {match.borrower.user.email}
+                    <b>Email: </b>
+                    {match.borrower.user.email}
                   </p>
                   <p className="userDate">
-                    <b>Amount Request: </b> {match.amountReq}
+                    <b>Amount Request: </b>
+                    {match.amountReq}
                   </p>
                   <p className="userDate">
-                    <b>Balance: </b> {match.borrower.financeData.balance}{" "}
+                    <b>Balance: </b>
+                    {match.borrower.financeData.balance}{" "}
                     {match.borrower.financeData.currency}
                   </p>
                   <p className="userDate">
-                    {" "}
                     {/* part A */}
-                    <b>Credit Score: </b> {match.borrower.creditScore}
+                    <b>Credit Score: </b>
+                    {match.borrower.creditScore}
                   </p>
                 </div>
               </div>
@@ -114,7 +117,7 @@ export const Matches = ({
                 </div>
               </footer>
             </li>
-          ) : null}{" "}
+          ) : null}
         </span>
       ))}
     </ul>
