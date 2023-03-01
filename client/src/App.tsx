@@ -11,7 +11,7 @@ export default function App() {
   const [labels, setLabels] = React.useState<string>(""); // part B.3
 
   // part D
-  const [add, setAdd] = React.useState(false);
+  const [add, setAdd] = React.useState<boolean>(false);
   const [obj, setObj] = React.useState<any>({
     id: "",
     creationTime: 0,
@@ -45,135 +45,110 @@ export default function App() {
 
     fetchMatches();
   }, []);
-  
+
   // part D
   const press = () => {
-    let ok = true; // flag for form
-    let message = false; // flag for alerts
+    let msg = "";
 
-    if (obj.companyName == "" || obj.amountReq == 0) {
-      alert("You need to fill all form in 1st section!");
-      message = true;
-      ok = false;
-    }
-    if (
-      (borrower.bankruptcy === "" ||
-        borrower.creditScore == 0 ||
-        borrower.ssn == 0) &&
-      ok
+    if (obj.companyName === "" || obj.amountReq === 0) {
+      msg = "You need to fill all form in 1st section!";
+    } else if (
+      borrower.bankruptcy === "" ||
+      borrower.creditScore === 0 ||
+      borrower.ssn === 0
     ) {
-      alert("You need to fill all form in 2nd section!");
-      message = true;
-      ok = false;
-    }
-    if (
-      (financeData.number == "" ||
-        financeData.balance == 0 ||
-        financeData.currency == "") &&
-      ok
+      msg = "You need to fill all form in 2nd section!";
+    } else if (
+      financeData.number === "" ||
+      financeData.balance === 0 ||
+      financeData.currency === ""
     ) {
-      alert("You need to fill all form in 3rd section!");
-      message = true;
-      ok = false;
-    }
-    if (
-      (user.firstName == "" ||
-        user.lastName == "" ||
-        user.email == "" ||
-        user.phoneNumber == "" ||
-        user.state == "" ||
-        user.userIp == "") &&
-      ok
+      msg = "You need to fill all form in 3rd section!";
+    } else if (
+      user.firstName === "" ||
+      user.lastName === "" ||
+      user.email === "" ||
+      user.phoneNumber === "" ||
+      user.state === "" ||
+      user.userIp === ""
     ) {
-      alert("You need to fill all form in 4th section!");
-      message = true;
-      ok = false;
+      msg = "You need to fill all form in 4th section!";
+    } else if (obj.labels.length === 0) {
+      msg = "You need to choose at least 1 label!";
     }
-    if (obj.labels.length == 0 && ok == true) {
-      alert("You need to choose at least 1 label!");
-      message = true;
-      ok = false;
+
+    if (msg !== "") {
+      alert(msg);
+      return;
     }
-    if (borrower.bankruptcy === "true") {
-      // change bankruptcy to boolean value
-      borrower.bankruptcy = true;
+
+    if (obj.amountReq < 1) {
+      // amountReq checker
+      msg = "You need to fill the amount!";
+      document.getElementById("amount")?.focus();
+    } else if (borrower.creditScore < 1) {
+      // creditScore checker
+      msg = "You need to fill the credit score!";
+      document.getElementById("credit")?.focus();
+    } else if (borrower.ssn < 1) {
+      // ssn checker
+      msg = "You need to fill the SSN!";
+      document.getElementById("ssn")?.focus();
+    } else if (financeData.balance < 1) {
+      // balance checker
+      msg = "You need to fill the balance!";
+      document.getElementById("balance")?.focus();
+    } else if (!user.email.includes("@")) {
+      // email checker
+      msg = "You need to enter a valid email!";
+      document.getElementById("email")?.focus();
     }
-    if (borrower.bankruptcy === "false") {
-      // change bankruptcy to boolean value
-      borrower.bankruptcy = false;
-    }
-    if (!message) {
-      // bank number checker (length && numbers)
-      for (let i = 0; i < 4; i++) {
-        if (
-          Number.isNaN(parseInt(financeData.number[i])) ||
-          financeData.number.length < 4
-        ) {
-          document.getElementById("bank")?.focus();
-          ok = false;
-          break;
-        }
+
+    // bank number checker (length && numbers)
+    for (let i = 0; i < 4; i++) {
+      if (
+        Number.isNaN(parseInt(financeData?.number[i])) ||
+        financeData?.number.length < 4
+      ) {
+        msg = "You need to fill all 4 digits!";
+        document.getElementById("bank")?.focus();
+        break;
       }
     }
-    if (obj.amountReq < 1 && !message) {
-      // amountReq checker
-      document.getElementById("amount")?.focus();
-      ok = false;
-    }
-    if (borrower.creditScore < 1 && !message) {
-      // creditScore checker
-      document.getElementById("credit")?.focus();
-      ok = false;
-    }
-    if (borrower.ssn < 1 && !message) {
-      // ssn checker
-      document.getElementById("ssn")?.focus();
-      ok = false;
-    }
-    if (financeData.balance < 1 && !message) {
-      // balance checker
-      document.getElementById("balance")?.focus();
-      ok = false;
-    }
-    if (!user.email.includes("@") && !message) {
-      // email checker
-      document.getElementById("email")?.focus();
-      ok = false;
-    }
-    if (ok) {
-      // form is valid
-      let allData = {
-        id:
-          user.lastName +
-          borrower.creditScore +
-          user.state +
-          financeData.number,
-        creationTime: Date.now(),
-        companyName: obj.companyName,
-        amountReq: parseInt(obj.amountReq),
-        borrower: {
-          bankruptcy: borrower.bankruptcy,
-          creditScore: parseInt(borrower.creditScore),
-          ssn: parseInt(borrower.ssn),
-          financeData: {
-            number: "XXXXXX" + financeData.number,
-            balance: parseInt(financeData.balance),
-            currency: financeData.currency,
-          },
-          user: {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            state: user.state,
-            userIp: user.userIp,
-          },
-        },
-        labels: obj.labels,
-      };
 
-      setAdd(false);
+    if (msg !== "") {
+      alert(msg);
+      return;
     }
+
+    const allData = {
+      id: `${user.lastName}${borrower.creditScore}${user.state}${financeData.number}`,
+      creationTime: Date.now(),
+      companyName: obj.companyName,
+      amountReq: parseInt(obj.amountReq),
+      borrower: {
+        bankruptcy: borrower.bankruptcy === "0" ? false : true,
+        creditScore: parseInt(borrower.creditScore),
+        ssn: parseInt(borrower.ssn),
+        financeData: {
+          number: `XXXXXX${financeData.number}`,
+          balance: parseInt(financeData.balance),
+          currency: financeData.currency,
+        },
+        user: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          state: user.state,
+          userIp: user.userIp,
+        },
+      },
+      labels: obj.labels,
+    };
+
+    setMatches([...matches, allData]);
+    setAdd(false);
   };
 
   // part D - multiple select
@@ -262,19 +237,20 @@ export default function App() {
           <h1>Adding Match Page</h1>
           <div className="box">
             <h3>Section 1</h3>
-            <input
-              className="inputs"
+            <Input
               placeholder="Company Name"
-              type="text"
-              onChange={(e) => setObj({ ...obj, companyName: e.target.value })}
+              onChange={(e: any) =>
+                setObj({ ...obj, companyName: e.target.value })
+              }
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="Amount Requested"
               id="amount"
               type="number"
               min={1}
-              onChange={(e) => setObj({ ...obj, amountReq: e.target.value })}
+              onChange={(e: any) =>
+                setObj({ ...obj, amountReq: e.target.value })
+              }
             />
           </div>
           <div className="box">
@@ -283,7 +259,7 @@ export default function App() {
             <input
               type="radio"
               name="a"
-              value="false"
+              value="0"
               id="no"
               onChange={(e) =>
                 setBorrower({ ...borrower, bankruptcy: e.target.value })
@@ -293,105 +269,93 @@ export default function App() {
             <input
               type="radio"
               name="a"
-              value="true"
+              value="1"
               id="yes"
               onChange={(e) =>
                 setBorrower({ ...borrower, bankruptcy: e.target.value })
               }
             />
             <label htmlFor="yes">Yes</label>
-            <input
-              className="inputs"
+            <Input
               placeholder="Credit Score"
               id="credit"
               type="number"
               min={1}
-              onChange={(e) =>
+              onChange={(e: any) =>
                 setBorrower({ ...borrower, creditScore: e.target.value })
               }
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="SSN"
               id="ssn"
               type="number"
               min={1}
-              onChange={(e) =>
+              onChange={(e: any) =>
                 setBorrower({ ...borrower, ssn: e.target.value })
               }
             />
           </div>
           <div className="box">
             <h3>Section 3</h3>
-            <input
-              className="inputs"
+            <Input
               placeholder="Last 4 Digits Of Bank Number"
               id="bank"
-              type="text"
               maxLength={4}
-              onChange={(e) =>
+              onChange={(e: any) =>
                 setFinanceData({ ...financeData, number: e.target.value })
               }
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="Balance"
               id="balance"
               type="number"
               min={1}
-              onChange={(e) =>
+              onChange={(e: any) =>
                 setFinanceData({ ...financeData, balance: e.target.value })
               }
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="Currency"
-              type="text"
-              onChange={(e) =>
+              onChange={(e: any) =>
                 setFinanceData({ ...financeData, currency: e.target.value })
               }
             />
           </div>
           <div className="box">
             <h3>Section 4</h3>
-            <input
-              className="inputs"
+            <Input
               placeholder="First Name"
-              type="text"
-              onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+              onChange={(e: any) =>
+                setUser({ ...user, firstName: e.target.value })
+              }
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="Last Name"
-              type="text"
-              onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+              onChange={(e: any) =>
+                setUser({ ...user, lastName: e.target.value })
+              }
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="Email"
-              id="email"
               type="email"
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              id="email"
+              onChange={(e: any) => setUser({ ...user, email: e.target.value })}
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="Phone Number"
-              type="text"
-              onChange={(e) =>
+              onChange={(e: any) =>
                 setUser({ ...user, phoneNumber: e.target.value })
               }
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="State"
-              type="text"
-              onChange={(e) => setUser({ ...user, state: e.target.value })}
+              onChange={(e: any) => setUser({ ...user, state: e.target.value })}
             />
-            <input
-              className="inputs"
+            <Input
               placeholder="User IP"
-              type="text"
-              onChange={(e) => setUser({ ...user, userIp: e.target.value })}
+              onChange={(e: any) =>
+                setUser({ ...user, userIp: e.target.value })
+              }
             />
           </div>
           <h3>Labels:</h3>
@@ -421,5 +385,19 @@ export default function App() {
         </div>
       )}
     </main>
+  );
+}
+
+function Input(props: any) {
+  return (
+    <input
+      className="inputs"
+      min={props?.min}
+      maxLength={props?.maxLength}
+      id={props?.id}
+      placeholder={props?.placeholder}
+      type={props?.type || "text"}
+      onChange={props.onChange}
+    />
   );
 }

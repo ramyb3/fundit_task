@@ -37,10 +37,10 @@ export const Matches = ({
   const label = filteredMatches.filter((x) => x.labels?.includes(labels)); // part B.3
 
   // part B.3
-  if (label.length != 0) {
+  if (label.length !== 0) {
     filteredMatches = label;
   }
-  if (search != "" && labels != "") {
+  if (search !== "" && labels !== "") {
     filteredMatches = label;
   }
 
@@ -94,29 +94,20 @@ export const Matches = ({
                 ) : null}
 
                 <div>
-                  <p className="userDate">
-                    <b>Full Name: </b>
-                    {match.borrower.user.firstName}{" "}
-                    {match.borrower.user.lastName}
-                  </p>
-                  <p className="userDate">
-                    <b>Email: </b>
-                    {match.borrower.user.email}
-                  </p>
-                  <p className="userDate">
-                    <b>Amount Request: </b>
-                    {match.amountReq}
-                  </p>
-                  <p className="userDate">
-                    <b>Balance: </b>
-                    {match.borrower.financeData.balance}{" "}
-                    {match.borrower.financeData.currency}
-                  </p>
-                  <p className="userDate">
-                    {/* part A */}
-                    <b>Credit Score: </b>
-                    {match.borrower.creditScore}
-                  </p>
+                  <Line
+                    text="Full Name"
+                    value={`${match.borrower.user.firstName} ${match.borrower.user.lastName}`}
+                  />
+                  <Line text="Email" value={match.borrower.user.email} />
+                  <Line text="Amount Request" value={match.amountReq} />
+                  <Line
+                    text="Balance"
+                    value={`${match.borrower.financeData.balance} ${match.borrower.financeData.currency}`}
+                  />
+                  <Line //part A
+                    text="Credit Score"
+                    value={match.borrower.creditScore}
+                  />
                 </div>
               </div>
               <footer>
@@ -131,3 +122,12 @@ export const Matches = ({
     </ul>
   );
 };
+
+function Line(props: any) {
+  return (
+    <p className="userDate">
+      <b>{props.text}: </b>
+      {props.value}
+    </p>
+  );
+}
