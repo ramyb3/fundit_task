@@ -53,36 +53,44 @@ export const Matches = ({
               <h5 className="title">{match.companyName}</h5>
               <div className="matchData">
                 {/* part C.1 */}
-                <input
-                  className="button"
-                  type="button"
-                  value="Approve"
-                  onClick={() => {
-                    setStatus([...status, "approve"]);
-                    setData([...data, match.id]);
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "5px",
+                    justifyContent: "end",
+                    marginTop: "-20px",
+                    paddingBottom: "10px",
                   }}
-                />
-                <input
-                  style={{ right: "80px" }}
-                  className="button"
-                  type="button"
-                  value="Decline"
-                  onClick={() => {
-                    setStatus([...status, "decline"]);
-                    setData([...data, match.id]);
-                  }}
-                />
+                >
+                  <button
+                    onClick={() => {
+                      setStatus([...status, "approve"]);
+                      setData([...data, match.id]);
+                    }}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => {
+                      setStatus([...status, "decline"]);
+                      setData([...data, match.id]);
+                    }}
+                  >
+                    Decline
+                  </button>
+                </div>
 
                 {/* part A */}
                 {match.borrower.creditScore > 678 ? (
-                  <span className="A"></span>
+                  <span className="letter A"></span>
                 ) : null}
                 {match.borrower.creditScore > 578 &&
                 match.borrower.creditScore < 679 ? (
-                  <span className="B"></span>
+                  <span className="letter B"></span>
                 ) : null}
                 {match.borrower.creditScore < 579 ? (
-                  <span className="C"></span>
+                  <span className="letter C"></span>
                 ) : null}
 
                 <div>

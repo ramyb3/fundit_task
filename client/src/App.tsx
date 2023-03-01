@@ -38,6 +38,14 @@ export default function App() {
     userIp: "",
   });
 
+  React.useEffect(() => {
+    async function fetchMatches() {
+      setMatches(await api.getMatches());
+    }
+
+    fetchMatches();
+  }, []);
+  
   // part D
   const press = () => {
     let ok = true; // flag for form
@@ -178,19 +186,11 @@ export default function App() {
     setObj({ ...obj, labels: value });
   };
 
-  React.useEffect(() => {
-    async function fetchMatches() {
-      setMatches(await api.getMatches());
-    }
-
-    fetchMatches();
-  }, []);
-
-  const onSearch = (val: string, newPage?: number) => {
+  const onSearch = (val: string) => {
     let searchDebounce: any;
 
     clearTimeout(searchDebounce);
-    searchDebounce = setTimeout(async () => {
+    searchDebounce = setTimeout(() => {
       setSearch(val);
     }, 300);
   };
@@ -209,8 +209,11 @@ export default function App() {
           </header>
 
           {/* part B.3 */}
-          <div className="results" style={{ fontSize: "14px" }}>
-            Filter by labels: &nbsp;&nbsp;
+          <div
+            className="results"
+            style={{ fontSize: "14px", display: "flex", gap: "8px" }}
+          >
+            Filter by labels:
             <select
               style={{ textAlign: "center" }}
               onChange={(e) => setLabels(e.target.value)}
@@ -222,14 +225,15 @@ export default function App() {
               <option value="Decline">Decline</option>
             </select>
           </div>
-
-          <input
-            type="button"
-            value="Add"
-            className="button"
-            style={{ top: "200px", right: "95px" }}
-            onClick={() => setAdd(true)}
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              marginRight: "-40px",
+            }}
+          >
+            <button onClick={() => setAdd(true)}>Add</button>
+          </div>
 
           {matches ? (
             <div className="results">Showing {matches.length} results</div>
@@ -247,7 +251,14 @@ export default function App() {
         </>
       ) : (
         // part D
-        <div style={{ textAlign: "center" }}>
+        <div
+          style={{
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
           <h1>Adding Match Page</h1>
           <div className="box">
             <h3>Section 1</h3>
@@ -257,7 +268,6 @@ export default function App() {
               type="text"
               onChange={(e) => setObj({ ...obj, companyName: e.target.value })}
             />
-            <br />
             <input
               className="inputs"
               placeholder="Amount Requested"
@@ -266,10 +276,7 @@ export default function App() {
               min={1}
               onChange={(e) => setObj({ ...obj, amountReq: e.target.value })}
             />
-            <br />
-            <br />
           </div>
-          <br />
           <div className="box">
             <h3>Section 2</h3>
             Bankruptcy:
@@ -277,21 +284,22 @@ export default function App() {
               type="radio"
               name="a"
               value="false"
+              id="no"
               onChange={(e) =>
                 setBorrower({ ...borrower, bankruptcy: e.target.value })
               }
             />
-            No &nbsp;&nbsp;
+            <label htmlFor="no">No</label>
             <input
               type="radio"
               name="a"
               value="true"
+              id="yes"
               onChange={(e) =>
                 setBorrower({ ...borrower, bankruptcy: e.target.value })
               }
             />
-            Yes
-            <br />
+            <label htmlFor="yes">Yes</label>
             <input
               className="inputs"
               placeholder="Credit Score"
@@ -302,7 +310,6 @@ export default function App() {
                 setBorrower({ ...borrower, creditScore: e.target.value })
               }
             />
-            <br />
             <input
               className="inputs"
               placeholder="SSN"
@@ -313,10 +320,7 @@ export default function App() {
                 setBorrower({ ...borrower, ssn: e.target.value })
               }
             />
-            <br />
-            <br />
           </div>
-          <br />
           <div className="box">
             <h3>Section 3</h3>
             <input
@@ -329,7 +333,6 @@ export default function App() {
                 setFinanceData({ ...financeData, number: e.target.value })
               }
             />
-            <br />
             <input
               className="inputs"
               placeholder="Balance"
@@ -340,7 +343,6 @@ export default function App() {
                 setFinanceData({ ...financeData, balance: e.target.value })
               }
             />
-            <br />
             <input
               className="inputs"
               placeholder="Currency"
@@ -349,10 +351,7 @@ export default function App() {
                 setFinanceData({ ...financeData, currency: e.target.value })
               }
             />
-            <br />
-            <br />
           </div>
-          <br />
           <div className="box">
             <h3>Section 4</h3>
             <input
@@ -361,14 +360,12 @@ export default function App() {
               type="text"
               onChange={(e) => setUser({ ...user, firstName: e.target.value })}
             />
-            <br />
             <input
               className="inputs"
               placeholder="Last Name"
               type="text"
               onChange={(e) => setUser({ ...user, lastName: e.target.value })}
             />
-            <br />
             <input
               className="inputs"
               placeholder="Email"
@@ -376,7 +373,6 @@ export default function App() {
               type="email"
               onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
-            <br />
             <input
               className="inputs"
               placeholder="Phone Number"
@@ -385,26 +381,28 @@ export default function App() {
                 setUser({ ...user, phoneNumber: e.target.value })
               }
             />
-            <br />
             <input
               className="inputs"
               placeholder="State"
               type="text"
               onChange={(e) => setUser({ ...user, state: e.target.value })}
             />
-            <br />
             <input
               className="inputs"
               placeholder="User IP"
               type="text"
               onChange={(e) => setUser({ ...user, userIp: e.target.value })}
             />
-            <br />
-            <br />
           </div>
           <h3>Labels:</h3>
           <select
-            style={{ textAlign: "center", width: "120px", fontSize: "16px" }}
+            style={{
+              textAlign: "center",
+              margin: "auto",
+              width: "max-content",
+              fontSize: "16px",
+              marginBottom: "10px",
+            }}
             multiple
             onChange={(e) => check(e)}
           >
@@ -413,21 +411,13 @@ export default function App() {
             <option value="Open">Open</option>
             <option value="Decline">Decline</option>
           </select>
-          <br />
-          <br />
-          <input
-            type="button"
-            style={{ cursor: "pointer" }}
-            value="Add Match"
-            onClick={press}
-          />
-          &nbsp;&nbsp;
-          <input
-            type="button"
-            style={{ cursor: "pointer" }}
-            value="Return To Matches"
-            onClick={() => setAdd(false)}
-          />
+
+          <div
+            style={{ display: "flex", gap: "5px", justifyContent: "center" }}
+          >
+            <button onClick={press}>Add Match</button>
+            <button onClick={() => setAdd(false)}>Return To Matches</button>
+          </div>
         </div>
       )}
     </main>
