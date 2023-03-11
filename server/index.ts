@@ -1,9 +1,11 @@
-import express from "express"
+//@ts-nocheck
+// import express from "express"
+const express = require('express');
 import bodyParser = require("body-parser");
 import fs from "fs";
 import { tempData } from "./temp-data";
 
-const app: express.Application = express();
+const app = express();
 const PORT = 8888;
 const PAGE_SIZE = tempData.length; // part B.1
 
