@@ -47,7 +47,7 @@ export default function App() {
   }, []);
 
   // part D
-  const addMatch = () => {
+  const press = () => {
     let msg = "";
 
     if (obj.companyName === "" || obj.amountReq === 0) {
@@ -152,13 +152,22 @@ export default function App() {
   };
 
   // part D - multiple select
-  const checkLabels = (e: any) => {
+  const check = (e: any) => {
     const value = Array.from(
       e.target.selectedOptions,
       (option: any) => option.value
     );
 
     setObj({ ...obj, labels: value });
+  };
+
+  const onSearch = (val: string) => {
+    let searchDebounce: any;
+
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      setSearch(val);
+    }, 300);
   };
 
   return (
@@ -170,7 +179,7 @@ export default function App() {
             <input
               type="search"
               placeholder="Search..."
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => onSearch(e.target.value)}
             />
           </header>
 
@@ -359,7 +368,7 @@ export default function App() {
               marginBottom: "10px",
             }}
             multiple
-            onChange={(e) => checkLabels(e)}
+            onChange={(e) => check(e)}
           >
             <option value="Close">Close</option>
             <option value="Possible">Possible</option>
@@ -370,7 +379,7 @@ export default function App() {
           <div
             style={{ display: "flex", gap: "5px", justifyContent: "center" }}
           >
-            <button onClick={addMatch}>Add Match</button>
+            <button onClick={press}>Add Match</button>
             <button onClick={() => setAdd(false)}>Return To Matches</button>
           </div>
         </div>

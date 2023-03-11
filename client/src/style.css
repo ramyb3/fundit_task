@@ -1,0 +1,58 @@
+button /* part C.1*/ {
+  cursor: pointer;
+}
+
+/* part A*/
+.letter {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border-style: solid;
+  font-size: 60px;
+  float: right;
+  text-align: center;
+}
+
+.A {
+  border-color: rgb(2, 247, 5);
+}
+
+.A:after {
+  content: "A";
+  color: rgb(2, 247, 5);
+}
+
+.B {
+  border-color: rgb(255, 244, 14);
+}
+
+.B:after {
+  content: "B";
+  color: rgb(252, 205, 0);
+}
+
+.C {
+  border-color: rgb(255, 4, 14);
+}
+
+.C:after {
+  content: "C";
+  color: rgb(255, 4, 14);
+}
+/* end of part A*/
+
+/* part D*/
+.box {
+  border-style: solid;
+  border-color: rgb(255, 205, 244);
+  width: 250px;
+  margin: auto;
+  padding-bottom: 20px;
+}
+
+.inputs {
+  font-size: 16px;
+  height: 20px;
+  width: 220px;
+}
+/* end of part D*/

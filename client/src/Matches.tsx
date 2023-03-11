@@ -1,5 +1,6 @@
 import React from "react";
 import { createData, Match } from "./api";
+import "./style.css";
 
 export const Matches = ({
   matches,
@@ -83,11 +84,14 @@ export const Matches = ({
                 {/* part A */}
                 {match.borrower.creditScore > 678 ? (
                   <span className="letter A"></span>
-                ) : match.borrower.creditScore > 578 ? (
+                ) : null}
+                {match.borrower.creditScore > 578 &&
+                match.borrower.creditScore < 679 ? (
                   <span className="letter B"></span>
-                ) : (
+                ) : null}
+                {match.borrower.creditScore < 579 ? (
                   <span className="letter C"></span>
-                )}
+                ) : null}
 
                 <div>
                   <Line
