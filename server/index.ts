@@ -1,6 +1,4 @@
-//@ts-nocheck
-// import express from "express"
-const express = require('express');
+import express from "express"
 import bodyParser = require("body-parser");
 import fs from "fs";
 import { tempData } from "./temp-data";

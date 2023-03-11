@@ -7,6 +7,7 @@
     "d": "ts-node index.ts"
   },
   "author": "",
+  "type": "module",
   "license": "ISC",
   "dependencies": {
     "@types/body-parser": "^1.19.2",
