@@ -1,4 +1,4 @@
-import express from "express";
+import express from "express"
 import bodyParser = require("body-parser");
 import fs from "fs";
 import { tempData } from "./temp-data";
